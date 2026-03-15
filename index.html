@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║              SAVE THE DATE · 09.05.2026                     ║
+  ║                                                              ║
+  ║  TO CUSTOMIZE:                                               ║
+  ║  1. Replace [Your Name] and [Partner's Name] with real names ║
+  ║  2. Replace [Year You Met] with the year you met             ║
+  ║  3. Put all photos in the /images folder next to this file   ║
+  ║  4. Convert marriagepic1.HEIC & marriagepic2.HEIC to .jpg   ║
+  ║     (Right-click > Quick Actions > Convert Image on Mac)     ║
+  ║                                                              ║
+  ║  FOR GITHUB PAGES:                                           ║
+  ║  1. Create a new GitHub repo                                 ║
+  ║  2. Upload this index.html and the images/ folder            ║
+  ║  3. Go to Settings > Pages > Deploy from branch > main       ║
+  ╚══════════════════════════════════════════════════════════════╝
+  -->
+  <title>Save the Date · 09.05.2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Josefin+Sans:wght@100;300;400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white:       #fdfdf8;
+      --olive:       #8fa882;
+      --olive-light: #c8d6be;
+      --olive-dark:  #4e6645;
+      --olive-pale:  #eef2ea;
+      --olive-deep:  #2b3826;
+      --gold:        #c4b99a;
+      --text:        #3a3a2e;
+      --text-light:  #7a7a68;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--white);
+      color: var(--text);
+      font-family: 'Josefin Sans', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ─── FLOATING PETALS ──────────────────────────────────────── */
+    #petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+
+    .petal {
+      position: absolute;
+      top: -20px;
+      border-radius: 50% 0;
+      opacity: 0;
+      animation: petalFall linear infinite;
+    }
+
+    @keyframes petalFall {
+      0%   { transform: translateY(-30px) rotate(0deg) scale(1);   opacity: 0.75; }
+      80%  { opacity: 0.4; }
+      100% { transform: translateY(110vh)  rotate(540deg) scale(0.6); opacity: 0; }
+    }
+
+    /* ─── HERO ─────────────────────────────────────────────────── */
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(155deg, var(--white) 0%, #e8efe3 60%, #d6e2ce 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(143,168,130,0.18) 0%, transparent 65%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.8; }
+      50%       { transform: translate(-50%, -50%) scale(1.08); opacity: 1;   }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.62rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--olive);
+      opacity: 0;
+      animation: fadeUp 1s ease 0.3s forwards;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3.2rem, 9vw, 6.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.05;
+      opacity: 0;
+      animation: fadeUp 1.3s ease 0.6s forwards;
+    }
+
+    .hero-amp {
+      display: block;
+      font-size: 0.55em;
+      color: var(--olive);
+      margin: 0.15em 0;
+    }
+
+    .hero-divider {
+      width: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--olive), transparent);
+      margin: 2rem auto;
+      animation: expandLine 1.2s ease 1.3s forwards;
+    }
+
+    .hero-year {
+      font-size: 0.62rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      opacity: 0;
+      animation: fadeUp 1s ease 1.6s forwards;
+    }
+
+    /* Scroll hint */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 2.2s forwards;
+      z-index: 2;
+    }
+
+    .scroll-hint-text {
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--text-light);
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 55px;
+      background: linear-gradient(to bottom, var(--olive) 0%, transparent 100%);
+      position: relative;
+      animation: lineDown 1.8s ease-in-out 2.5s infinite;
+    }
+
+    .scroll-line::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%) rotate(45deg);
+      width: 5px;
+      height: 5px;
+      border-right: 1px solid var(--olive);
+      border-bottom: 1px solid var(--olive);
+    }
+
+    @keyframes lineDown {
+      0%   { transform: scaleY(0);   transform-origin: top;    opacity: 1; }
+      50%  { transform: scaleY(1);   transform-origin: top;    opacity: 1; }
+      51%  { transform: scaleY(1);   transform-origin: bottom; }
+      100% { transform: scaleY(0);   transform-origin: bottom; opacity: 0.3; }
+    }
+
+    /* ─── STORY SECTIONS ──────────────────────────────────────── */
+    .story-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 2rem;
+      position: relative;
+    }
+
+    .story-section.bg-white { background: var(--white); }
+    .story-section.bg-pale  { background: var(--olive-pale); }
+
+    .story-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .story-section.reverse .story-inner {
+      direction: rtl;
+    }
+    .story-section.reverse .story-inner > * {
+      direction: ltr;
+    }
+
+    /* Photo frame animations */
+    .photo-frame {
+      position: relative;
+      opacity: 0;
+      transform: translateX(-70px);
+      transition: opacity 1.3s cubic-bezier(0.16,1,0.3,1),
+                  transform 1.3s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .story-section.reverse .photo-frame {
+      transform: translateX(70px);
+    }
+
+    .photo-frame.in-view {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Decorative border that slides */
+    .photo-frame::before {
+      content: '';
+      position: absolute;
+      top: -14px; left: -14px;
+      right: 14px; bottom: 14px;
+      border: 1.5px solid var(--olive-light);
+      z-index: 0;
+      transition: all 1.6s cubic-bezier(0.16,1,0.3,1) 0.2s;
+      opacity: 0;
+    }
+
+    .photo-frame.in-view::before {
+      top: 14px; left: 14px;
+      right: -14px; bottom: -14px;
+      opacity: 1;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 520px;
+      object-fit: cover;
+      display: block;
+      position: relative;
+      z-index: 1;
+      filter: saturate(0.85) brightness(1.02);
+      transition: filter 0.6s ease, transform 0.6s ease;
+    }
+
+    .photo-frame:hover img {
+      filter: saturate(1.1) brightness(1.05);
+      transform: scale(1.02);
+    }
+
+    /* Story text animations */
+    .story-text {
+      opacity: 0;
+      transform: translateX(70px);
+      transition: opacity 1.3s cubic-bezier(0.16,1,0.3,1) 0.3s,
+                  transform 1.3s cubic-bezier(0.16,1,0.3,1) 0.3s;
+    }
+
+    .story-section.reverse .story-text {
+      transform: translateX(-70px);
+    }
+
+    .story-text.in-view {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .chapter-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-bottom: 1.5rem;
+    }
+
+    .story-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.9rem, 3.2vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.35;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+    }
+
+    .story-detail {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--text-light);
+      line-height: 2.1;
+    }
+
+    .story-ornament {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-top: 2rem;
+    }
+
+    .story-ornament::before,
+    .story-ornament::after {
+      content: '';
+      height: 1px;
+      background: var(--olive-light);
+    }
+
+    .story-ornament::before { width: 30px; }
+    .story-ornament::after  { width: 15px; }
+
+    .story-ornament span {
+      color: var(--olive);
+      font-size: 0.5rem;
+    }
+
+    /* ─── PROPOSAL GRID ───────────────────────────────────────── */
+    .proposal-section {
+      padding: 6rem 2rem;
+      background: var(--olive-pale);
+      text-align: center;
+    }
+
+    .proposal-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.55em;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-bottom: 4rem;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.9s ease;
+    }
+
+    .section-eyebrow.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .proposal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-bottom: 3rem;
+    }
+
+    .proposal-item {
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(50px) scale(0.96);
+      transition: opacity 1s cubic-bezier(0.16,1,0.3,1),
+                  transform 1s cubic-bezier(0.16,1,0.3,1);
+    }
+
+    .proposal-item:nth-child(1) { transition-delay: 0s; }
+    .proposal-item:nth-child(2) { transition-delay: 0.18s; }
+    .proposal-item:nth-child(3) { transition-delay: 0.34s; }
+    .proposal-item:nth-child(4) { transition-delay: 0.5s; }
+
+    .proposal-item.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .proposal-item img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.7s ease;
+    }
+
+    .proposal-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .proposal-caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease 0.5s, transform 1.2s ease 0.5s;
+    }
+
+    .proposal-caption.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── FINALE ──────────────────────────────────────────────── */
+    .finale-section {
+      min-height: 100vh;
+      background: var(--olive-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .finale-glow {
+      position: absolute;
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(143,168,130,0.22) 0%, rgba(143,168,130,0.05) 50%, transparent 70%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: breathe 5s ease-in-out infinite;
+    }
+
+    #particles-canvas {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+    }
+
+    .finale-content {
+      position: relative;
+      z-index: 10;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .finale-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.7em;
+      text-transform: uppercase;
+      color: var(--olive-light);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.1s ease, transform 1.1s ease;
+      margin-bottom: 2rem;
+    }
+
+    .finale-eyebrow.in-view { opacity: 1; transform: translateY(0); }
+
+    .finale-main {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(3rem, 9vw, 8rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--white);
+      line-height: 1.0;
+      opacity: 0;
+      transform: translateY(50px) scale(0.93);
+      transition: opacity 1.6s cubic-bezier(0.16,1,0.3,1) 0.4s,
+                  transform 1.6s cubic-bezier(0.16,1,0.3,1) 0.4s;
+      text-shadow: 0 0 80px rgba(143,168,130,0.3);
+    }
+
+    .finale-main.in-view {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .finale-date {
+      font-family: 'Josefin Sans', sans-serif;
+      font-size: clamp(1.6rem, 5vw, 4.5rem);
+      font-weight: 100;
+      letter-spacing: 0.35em;
+      color: var(--olive-light);
+      margin-top: 1.2rem;
+      opacity: 0;
+      transform: translateY(25px);
+      transition: opacity 1.4s ease 1s, transform 1.4s ease 1s;
+    }
+
+    .finale-date.in-view { opacity: 1; transform: translateY(0); }
+
+    .finale-rule {
+      width: 0;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--olive), transparent);
+      margin: 2.5rem auto;
+      transition: width 1.8s ease 1.6s;
+    }
+
+    .finale-rule.in-view { width: 180px; }
+
+    .finale-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 3vw, 2.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(253,253,248,0.65);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 1.1s ease 2.1s, transform 1.1s ease 2.1s;
+    }
+
+    .finale-names.in-view { opacity: 1; transform: translateY(0); }
+
+    .finale-footer {
+      margin-top: 3rem;
+      font-size: 0.58rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: rgba(143,168,130,0.45);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 1s ease 2.7s, transform 1s ease 2.7s;
+    }
+
+    .finale-footer.in-view { opacity: 1; transform: translateY(0); }
+
+    /* ─── KEYFRAMES ───────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes expandLine {
+      from { width: 0;   opacity: 0; }
+      to   { width: 100px; opacity: 1; }
+    }
+
+    /* ─── RESPONSIVE ──────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .story-inner {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .story-section.reverse .story-inner { direction: ltr; }
+      .photo-frame { transform: translateX(0) translateY(40px) !important; }
+      .photo-frame.in-view { transform: translateY(0) !important; }
+      .story-text { transform: translateX(0) translateY(30px) !important; }
+      .story-text.in-view { transform: translateY(0) !important; }
+      .photo-frame img { height: 360px; }
+      .proposal-grid { grid-template-columns: 1fr; }
+      .proposal-item img { height: 300px; }
+    }
+
+    @media (max-width: 500px) {
+      .story-section { padding: 4rem 1.2rem; }
+      .photo-frame img { height: 280px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── FLOATING PETALS ──────────────────────────────────────── -->
+  <div id="petals"></div>
+
+  <!-- ── HERO ────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">A Love Story</p>
+      <h1 class="hero-names">
+        [Your Name]
+        <span class="hero-amp">&amp;</span>
+        [Partner's Name]
+      </h1>
+      <div class="hero-divider"></div>
+      <p class="hero-year">Est. [Year You Met]</p>
+    </div>
+    <div class="scroll-hint">
+      <span class="scroll-hint-text">Scroll to begin our story</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 1 : bf_gf ────────────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/bf_gf.JPG" alt="The beginning of us" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Chapter One</p>
+        <h2 class="story-message">Where it all began</h2>
+        <p class="story-detail">Every great love story starts with a single moment —<br>the one where everything quietly changed forever.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 2 : arkansas ────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/arkansas.JPG" alt="Arkansas" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Adventures</p>
+        <h2 class="story-message">The world is better when we explore it together</h2>
+        <p class="story-detail">Rolling hills, open roads, new horizons —<br>every adventure is sweeter with you by my side.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 3 : turnerfalls ──────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/turnerfalls.JPG" alt="Turner Falls" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Oklahoma</p>
+        <h2 class="story-message">Finding beauty in every corner of the world</h2>
+        <p class="story-detail">Turner Falls — where the water falls<br>and time gently stands still.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 4 : beach ────────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/beach.JPG" alt="Beach" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Our Happy Place</p>
+        <h2 class="story-message">Wherever the waves take us, we go together</h2>
+        <p class="story-detail">Salt air and golden hours —<br>some places feel like home because you're there.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 5 : cadillac ranch ──────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/cadalacranch.JPG" alt="Cadillac Ranch" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Road Trips</p>
+        <h2 class="story-message">Life is a road trip — and I'm glad you're riding shotgun</h2>
+        <p class="story-detail">Every mile marker a memory,<br>every detour a new discovery.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 6 : halloween ────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/halloween.JPG" alt="Halloween" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Every Season</p>
+        <h2 class="story-message">Through every season, every chapter — always us</h2>
+        <p class="story-detail">The holidays are brighter, the seasons sweeter,<br>life is fuller because of you.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 7 : pottery ──────────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/pottery.JPG" alt="Pottery" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Creating Together</p>
+        <h2 class="story-message">We are forever shaping something beautiful</h2>
+        <p class="story-detail">Not just clay — but a life.<br>Crafted carefully, with love, with intention.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 8 : lantern festival ────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/lantern%20festival.JPG" alt="Lantern Festival" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Wishes &amp; Dreams</p>
+        <h2 class="story-message">We sent our wishes to the sky — and they came true</h2>
+        <p class="story-detail">Under a thousand lights,<br>we whispered our dreams into the night.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 9 : anniversary ──────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/anniversary.JPG" alt="Anniversary" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Milestones</p>
+        <h2 class="story-message">Every year, I fall in love with you all over again</h2>
+        <p class="story-detail">Anniversaries are just reminders<br>of how lucky we are to have found each other.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 10 : treehug ─────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/treehug.JPG" alt="Tree hug" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Deeply Rooted</p>
+        <h2 class="story-message">Rooted together, we can weather any storm</h2>
+        <p class="story-detail">Like trees reaching for the same sky,<br>our love grows stronger with every season.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 11 : may 2025 ────────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/20250503_144757.jpg" alt="Together" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Just Another Day</p>
+        <h2 class="story-message">The ordinary moments are the ones I treasure most</h2>
+        <p class="story-detail">No grand adventure needed —<br>just you, just this, just us.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 12 : may 2025 ────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/20250504_180433.jpg" alt="Together" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Always Together</p>
+        <h2 class="story-message">In every photo, in every memory — there you are</h2>
+        <p class="story-detail">My favorite person in every room,<br>every place, every moment.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── CHAPTER 13 : mystery ─────────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/3182d5172f8c69de0430fffc0b4446e5.jpg" alt="Us" loading="lazy">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Our Story</p>
+        <h2 class="story-message">A thousand reasons I love you, and a lifetime to discover more</h2>
+        <p class="story-detail">The best chapter?<br>It hasn't been written yet.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── PROPOSAL SEQUENCE ────────────────────────────────────── -->
+  <section class="proposal-section">
+    <div class="proposal-inner">
+      <p class="section-eyebrow">The Moment Everything Changed</p>
+      <div class="proposal-grid">
+        <div class="proposal-item">
+          <img src="images/proposal1.JPG" alt="Proposal" loading="lazy">
+        </div>
+        <div class="proposal-item">
+          <img src="images/proposal2.JPG" alt="Proposal" loading="lazy">
+        </div>
+        <div class="proposal-item">
+          <img src="images/proposal3.JPG" alt="Proposal" loading="lazy">
+        </div>
+        <div class="proposal-item">
+          <img src="images/proposal4.JPG" alt="Proposal" loading="lazy">
+        </div>
+      </div>
+      <p class="proposal-caption">She said yes.</p>
+    </div>
+  </section>
+
+  <!-- ── MARRIED PIC 1 ─────────────────────────────────────────── -->
+  <section class="story-section bg-white">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/marriagepic1.HEIC" alt="Together forever"
+             loading="lazy"
+             onerror="this.src='images/marriagepic1.jpg'; this.onerror=null;">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Forever Begins</p>
+        <h2 class="story-message">Two hearts, one beautiful life ahead</h2>
+        <p class="story-detail">Everything that led us here<br>was preparing us for this very moment.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MARRIED PIC 2 ─────────────────────────────────────────── -->
+  <section class="story-section bg-pale reverse">
+    <div class="story-inner">
+      <div class="photo-frame">
+        <img src="images/marriagepic2.HEIC" alt="Together always"
+             loading="lazy"
+             onerror="this.src='images/marriagepic2.jpg'; this.onerror=null;">
+      </div>
+      <div class="story-text">
+        <p class="chapter-label">Together Always</p>
+        <h2 class="story-message">And now — the greatest adventure yet</h2>
+        <p class="story-detail">Ready for every moment, every season,<br>every forever.</p>
+        <div class="story-ornament"><span>✦</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SAVE THE DATE FINALE ──────────────────────────────────── -->
+  <section class="finale-section" id="finale">
+    <div class="finale-glow"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="finale-content" id="finale-content">
+      <p class="finale-eyebrow" id="f-eyebrow">You are cordially invited to celebrate</p>
+      <h2 class="finale-main"  id="f-main">Save the Date</h2>
+      <p class="finale-date"   id="f-date">09 · 05 · 2026</p>
+      <div class="finale-rule" id="f-rule"></div>
+      <p class="finale-names"  id="f-names">[Your Name] &amp; [Partner's Name]</p>
+      <p class="finale-footer" id="f-footer">Formal invitation to follow</p>
+    </div>
+  </section>
+
+  <!-- ─────────────────────────────────────────────────────────── -->
+  <script>
+    // ── FLOATING PETALS ─────────────────────────────────────────
+    const petalsEl = document.getElementById('petals');
+    const petalColors = ['#c8d6be','#d4e0ca','#b8cca8','#e2ece0','#cad9c0'];
+
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left    = (Math.random() * 100) + 'vw';
+      p.style.width   = (7 + Math.random() * 10) + 'px';
+      p.style.height  = p.style.width;
+      p.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
+      p.style.borderRadius = Math.random() > 0.4 ? '50% 0' : '60% 40%';
+      p.style.animationDuration  = (9 + Math.random() * 13) + 's';
+      p.style.animationDelay     = (Math.random() * 22) + 's';
+      petalsEl.appendChild(p);
+    }
+
+    // ── SCROLL-TRIGGERED ANIMATIONS ─────────────────────────────
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) e.target.classList.add('in-view');
+      }),
+      { threshold: 0.18, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll(
+      '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow'
+    ).forEach(el => observer.observe(el));
+
+    // ── FINALE OBSERVER ─────────────────────────────────────────
+    const finaleEl = document.getElementById('finale');
+    let finaleTriggered = false;
+
+    const finaleObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting && !finaleTriggered) {
+          finaleTriggered = true;
+          ['f-eyebrow','f-main','f-date','f-rule','f-names','f-footer'].forEach(id => {
+            document.getElementById(id).classList.add('in-view');
+          });
+          initParticles();
+        }
+      });
+    }, { threshold: 0.25 });
+
+    finaleObserver.observe(finaleEl);
+
+    // ── PARTICLE CANVAS ─────────────────────────────────────────
+    const canvas = document.getElementById('particles-canvas');
+    const ctx    = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width  = finaleEl.offsetWidth;
+      canvas.height = finaleEl.offsetHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor(delayed) {
+        this.delayed = delayed || false;
+        this.reset(true);
+      }
+
+      reset(initial) {
+        this.x      = Math.random() * canvas.width;
+        this.y      = initial && this.delayed
+                      ? Math.random() * canvas.height
+                      : canvas.height + Math.random() * 50;
+        this.size   = 1 + Math.random() * 3.5;
+        this.speedY = -(0.4 + Math.random() * 1.2);
+        this.speedX = (Math.random() - 0.5) * 0.6;
+        this.drift  = (Math.random() - 0.5) * 0.008;
+        this.angle  = Math.random() * Math.PI * 2;
+        this.alpha  = 0.15 + Math.random() * 0.55;
+        this.fade   = 0.0015 + Math.random() * 0.003;
+        this.color  = Math.random() > 0.45 ? '#8fa882' : '#c8d6be';
+      }
+
+      update() {
+        this.y      += this.speedY;
+        this.x      += this.speedX;
+        this.speedX += this.drift;
+        this.angle  += 0.02;
+        this.alpha  -= this.fade;
+        if (this.y < -20 || this.alpha <= 0) this.reset(false);
+      }
+
+      draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle   = this.color;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.beginPath();
+        ctx.ellipse(0, 0, this.size * 2.2, this.size, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push(new Particle(true));
+      }
+      requestAnimationFrame(animateParticles);
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(animateParticles);
+    }
+  </script>
+
+</body>
+</html>
