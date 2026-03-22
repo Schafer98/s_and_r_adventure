@@ -53,6 +53,145 @@
       overflow-x: hidden;
     }
 
+    /* ─── RSVP NAV BUTTON ─────────────────────────────────────── */
+    .rsvp-nav {
+      position: fixed;
+      top: 1.4rem;
+      right: 1.4rem;
+      z-index: 1001;
+      opacity: 0;
+      transform: translateY(-10px);
+      animation: fadeUp 0.8s ease 2.5s forwards;
+    }
+
+    .rsvp-nav a {
+      display: inline-block;
+      font-size: 0.55rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--olive-dark);
+      background: rgba(253,253,248,0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 0.6rem 1.3rem;
+      border: 1px solid var(--olive-light);
+      border-radius: 2px;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .rsvp-nav a:hover {
+      background: var(--olive);
+      color: var(--white);
+      border-color: var(--olive);
+    }
+
+    /* On dark sections, swap to dark glass */
+    .rsvp-nav.on-dark a {
+      background: rgba(43,56,38,0.7);
+      color: var(--olive-light);
+      border-color: rgba(143,168,130,0.3);
+    }
+
+    .rsvp-nav.on-dark a:hover {
+      background: var(--olive);
+      color: var(--white);
+    }
+
+    /* ─── HERO LOGO ──────────────────────────────────────────── */
+    .hero-logo {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.1s forwards;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+
+    /* ─── RSVP SECTION (after finale) ────────────────────────── */
+    .rsvp-section {
+      padding: 5rem 2rem 6rem;
+      background: var(--olive-deep);
+      text-align: center;
+      position: relative;
+    }
+
+    .rsvp-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .rsvp-eyebrow {
+      font-size: 0.6rem;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: var(--olive-light);
+      margin-bottom: 1.5rem;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .rsvp-eyebrow.in-view { opacity: 1; transform: translateY(0); }
+
+    .rsvp-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--white);
+      margin-bottom: 1rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease 0.3s, transform 1.2s ease 0.3s;
+    }
+
+    .rsvp-heading.in-view { opacity: 1; transform: translateY(0); }
+
+    .rsvp-detail {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      color: rgba(253,253,248,0.5);
+      line-height: 2;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 1s ease 0.5s, transform 1s ease 0.5s;
+    }
+
+    .rsvp-detail.in-view { opacity: 1; transform: translateY(0); }
+
+    .rsvp-btn {
+      display: inline-block;
+      font-size: 0.6rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--white);
+      background: var(--olive-dark);
+      border: 1.5px solid var(--olive);
+      padding: 1rem 3rem;
+      border-radius: 2px;
+      transition: background 0.4s ease, transform 0.3s ease;
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 1s ease 0.7s, transform 1s ease 0.7s,
+                  background 0.4s ease;
+    }
+
+    .rsvp-btn.in-view { opacity: 1; transform: translateY(0); }
+
+    .rsvp-btn:hover {
+      background: var(--olive);
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 500px) {
+      .rsvp-section { padding: 3.5rem 1rem 4rem; }
+    }
+
     /* ─── FLOATING PETALS ──────────────────────────────────────── */
     #petals {
       position: fixed;
@@ -843,16 +982,27 @@
       /* Hide the offset decorative border on narrow screens */
       .photo-frame::before { display: none; }
 
-      /* Photos: slightly wider crop so they don't dominate the viewport */
+      /*
+       * KEY FIX: Remove forced aspect-ratio on mobile.
+       * Let photos show naturally so faces/subjects aren't cut off.
+       * Only cap the max-height so they don't dominate the viewport.
+       */
       .photo-frame img {
-        aspect-ratio: 4 / 3;
-        max-height: 55vh;
-        object-position: center;
+        aspect-ratio: auto;
+        max-height: 60vh;
+        width: 100%;
+        object-position: center top;
       }
 
-      /* Proposal grid: keep 2-up but with a capped height */
+      /* Proposal grid: keep 2-up, natural proportions */
       .proposal-item img {
-        aspect-ratio: 3 / 4;
+        aspect-ratio: auto;
+        max-height: 50vh;
+      }
+
+      /* Then-and-now: let photos breathe */
+      .then-now-photo img {
+        aspect-ratio: auto;
         max-height: 45vh;
       }
 
@@ -865,17 +1015,16 @@
       .story-section { padding: 3rem 1rem; }
       .proposal-section { padding: 3rem 1rem; }
       .hero-names { font-size: clamp(2.8rem, 11vw, 4rem); }
+      .hero-logo { width: 70px; height: 70px; }
 
       .photo-frame img {
-        aspect-ratio: 1 / 1;
-        max-height: 50vh;
+        max-height: 55vh;
       }
 
       /* Single column proposals on very small screens */
       .proposal-grid { grid-template-columns: 1fr; }
       .proposal-item img {
-        aspect-ratio: 4 / 3;
-        max-height: 50vh;
+        max-height: 55vh;
       }
 
       .finale-main { font-size: clamp(2.5rem, 12vw, 5rem); }
@@ -886,11 +1035,17 @@
     @media (max-width: 375px) {
       .hero-names { font-size: clamp(2.2rem, 13vw, 3rem); }
       .story-message { font-size: clamp(1.3rem, 5vw, 1.8rem); }
-      .photo-frame img { max-height: 45vh; }
+      .photo-frame img { max-height: 50vh; }
     }
   </style>
 </head>
 <body>
+
+  <!-- ── RSVP NAV (fixed top-right) ──────────────────────────── -->
+  <nav class="rsvp-nav" id="rsvp-nav">
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdkHPCuyzWn_MZvkk61U__AFeEHM0XJLwjC5EdlQbOAQzZIjg/viewform?usp=publish-editor"
+       target="_blank" rel="noopener">RSVP</a>
+  </nav>
 
   <!-- ── FLOATING PETALS ──────────────────────────────────────── -->
   <div id="petals"></div>
@@ -899,6 +1054,7 @@
   <section class="hero">
     <div class="hero-glow"></div>
     <div class="hero-content">
+      <img src="images/Logo.jpeg" alt="R &amp; S" class="hero-logo">
       <p class="hero-eyebrow">A Love Story</p>
       <h1 class="hero-names">
         Rose
@@ -966,9 +1122,9 @@
         <img src="images/pottery.JPG" alt="Pottery together" loading="lazy">
       </div>
       <div class="story-text">
-        <p class="chapter-label">Creating Together</p>
+        <p class="chapter-label">Handmade</p>
         <h2 class="story-message">From the very start, they were shaping something beautiful</h2>
-        <p class="story-detail">Not just the clay between their fingers, but a life.<br>Built carefully, together, with love and intention.</p>
+        <p class="story-detail">Not just the clay between their fingers, but a life.<br>Built carefully, with patience, love, and intention.</p>
         <div class="story-ornament"><span>✦</span></div>
       </div>
     </div>
@@ -1013,7 +1169,7 @@
       <div class="story-text">
         <p class="chapter-label">Xi'an, China</p>
         <h2 class="story-message">Side by side on an ancient city wall, pedaling into forever</h2>
-        <p class="story-detail">In Xi'an, they rented a tandem bicycle and rode together<br>along the wall that has surrounded the city for centuries.<br>Their laughter echoed out across the rooftops below.</p>
+        <p class="story-detail">In Xi'an, they rented a tandem bicycle and rode side by side<br>along the wall that has surrounded the city for centuries.<br>Their laughter echoed out across the rooftops below.</p>
         <div class="story-ornament"><span>✦</span></div>
       </div>
     </div>
@@ -1028,7 +1184,7 @@
       <div class="story-text">
         <p class="chapter-label">On the Ice</p>
         <h2 class="story-message">Never a typical date. They wouldn't have it any other way.</h2>
-        <p class="story-detail">Forget the ordinary ice rink. They took to the ice on bikes and contraptions,<br>and ended up squeezed together in a duck-shaped sled,<br>laughing so hard they could barely steer.</p>
+        <p class="story-detail">Forget the ordinary ice rink. They took to the ice on bikes and contraptions,<br>and ended up squeezed into a duck-shaped sled,<br>laughing so hard they could barely steer.</p>
         <div class="story-ornament"><span>✦</span></div>
       </div>
     </div>
@@ -1085,8 +1241,8 @@
         </div>
       </div>
       <div class="then-now-text">
-        <h2 class="then-now-message">Same place, same pose, a whole different chapter</h2>
-        <p class="then-now-detail">Some things never change. The way they look at each other is one of them.</p>
+        <h2 class="then-now-message">From the first date to forever</h2>
+        <p class="then-now-detail">Same spot, same smile, but so much more between them now.<br>What started as brand new is now a whole life being built.</p>
       </div>
     </div>
   </section>
@@ -1128,6 +1284,18 @@
     </div>
   </section>
 
+  <!-- ── RSVP SECTION ─────────────────────────────────────────── -->
+  <section class="rsvp-section" id="rsvp-section">
+    <div class="rsvp-inner">
+      <p class="rsvp-eyebrow">Let us know you're coming</p>
+      <h2 class="rsvp-heading">We would love to celebrate with you</h2>
+      <p class="rsvp-detail">Formal invitations are on the way, but in the meantime<br>please let us know if you can make it.</p>
+      <a class="rsvp-btn"
+         href="https://docs.google.com/forms/d/e/1FAIpQLSdkHPCuyzWn_MZvkk61U__AFeEHM0XJLwjC5EdlQbOAQzZIjg/viewform?usp=publish-editor"
+         target="_blank" rel="noopener">RSVP Here</a>
+    </div>
+  </section>
+
   <!-- ─────────────────────────────────────────────────────────── -->
   <script>
     // ── FLOATING PETALS ─────────────────────────────────────────
@@ -1158,7 +1326,7 @@
     );
 
     document.querySelectorAll(
-      '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow, .then-now-photo, .then-now-text'
+      '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow, .then-now-photo, .then-now-text, .rsvp-eyebrow, .rsvp-heading, .rsvp-detail, .rsvp-btn'
     ).forEach(el => observer.observe(el));
 
     // ── VIDEO PROMPT OBSERVER ──────────────────────────────────
@@ -1358,6 +1526,31 @@
       particles.forEach(p => { p.update(); p.draw(); });
       requestAnimationFrame(animateParticles);
     }
+
+    // ── RSVP NAV: toggle dark style over dark sections ────────
+    const rsvpNav = document.getElementById('rsvp-nav');
+    const darkSections = document.querySelectorAll('.video-section, .finale-section, .rsvp-section');
+
+    const navObserver = new IntersectionObserver(entries => {
+      // If any dark section is prominently visible, go dark
+      let anyDark = false;
+      darkSections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top < 80 && rect.bottom > 80) anyDark = true;
+      });
+      rsvpNav.classList.toggle('on-dark', anyDark);
+    }, { threshold: 0, rootMargin: '-70px 0px -90% 0px' });
+
+    darkSections.forEach(s => navObserver.observe(s));
+    // Also check on scroll for more responsiveness
+    window.addEventListener('scroll', function() {
+      let anyDark = false;
+      darkSections.forEach(s => {
+        const rect = s.getBoundingClientRect();
+        if (rect.top < 80 && rect.bottom > 80) anyDark = true;
+      });
+      rsvpNav.classList.toggle('on-dark', anyDark);
+    }, { passive: true });
   </script>
 
 </body>
