@@ -447,6 +447,97 @@
       transform: translateY(0);
     }
 
+    /* ─── THEN & NOW (side-by-side comparison) ─────────────── */
+    .then-now-section {
+      padding: 6rem 2rem;
+      background: var(--olive-pale);
+      text-align: center;
+    }
+
+    .then-now-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .then-now-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .then-now-photo {
+      overflow: hidden;
+      position: relative;
+      opacity: 0;
+      transform: translateY(40px);
+      will-change: transform, opacity;
+      transition: opacity 1.2s cubic-bezier(0.25, 1, 0.5, 1),
+                  transform 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .then-now-photo:nth-child(2) { transition-delay: 0.2s; }
+
+    .then-now-photo.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .then-now-photo img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      max-height: 550px;
+      height: auto;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .then-now-label {
+      font-size: 0.55rem;
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      color: var(--olive);
+      margin-top: 0.8rem;
+    }
+
+    .then-now-text {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1.2s ease 0.4s, transform 1.2s ease 0.4s;
+    }
+
+    .then-now-text.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .then-now-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3.5vw, 3rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .then-now-detail {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      color: var(--text-light);
+      line-height: 2.1;
+    }
+
+    @media (max-width: 500px) {
+      .then-now-section { padding: 3rem 1rem; }
+      .then-now-pair { gap: 0.8rem; }
+      .then-now-photo img {
+        aspect-ratio: 2 / 3;
+        max-height: 40vh;
+      }
+      .then-now-message { font-size: clamp(1.4rem, 5vw, 2rem); }
+    }
+
     /* ─── VIDEO SECTION ──────────────────────────────────────── */
     .video-section {
       min-height: 100vh;
@@ -980,17 +1071,22 @@
     </div>
   </section>
 
-  <!-- ── MARRIED PIC 2 ─────────────────────────────────────────── -->
-  <section class="story-section bg-pale reverse">
-    <div class="story-inner">
-      <div class="photo-frame">
-        <img src="images/marriagepic2.jpg" alt="Together always" loading="lazy">
+  <!-- ── THEN & NOW ───────────────────────────────────────────── -->
+  <section class="then-now-section">
+    <div class="then-now-inner">
+      <div class="then-now-pair">
+        <div class="then-now-photo">
+          <img src="images/premarriagepic2.jpg" alt="Then" loading="lazy">
+          <p class="then-now-label">Then</p>
+        </div>
+        <div class="then-now-photo">
+          <img src="images/marriagepic2.jpeg" alt="Now" loading="lazy">
+          <p class="then-now-label">Now</p>
+        </div>
       </div>
-      <div class="story-text">
-        <p class="chapter-label">Together Always</p>
-        <h2 class="story-message">And now, the greatest adventure yet</h2>
-        <p class="story-detail">Their story is only getting started.<br>Ready for every moment, every season, every forever.</p>
-        <div class="story-ornament"><span>✦</span></div>
+      <div class="then-now-text">
+        <h2 class="then-now-message">Same place, same pose, a whole different chapter</h2>
+        <p class="then-now-detail">Some things never change. The way they look at each other is one of them.</p>
       </div>
     </div>
   </section>
@@ -1062,7 +1158,7 @@
     );
 
     document.querySelectorAll(
-      '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow'
+      '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow, .then-now-photo, .then-now-text'
     ).forEach(el => observer.observe(el));
 
     // ── VIDEO PROMPT OBSERVER ──────────────────────────────────
