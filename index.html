@@ -447,6 +447,148 @@
       transform: translateY(0);
     }
 
+    /* ─── VIDEO SECTION ──────────────────────────────────────── */
+    .video-section {
+      min-height: 100vh;
+      background: #1a1f16;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .video-section-glow {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(143,168,130,0.12) 0%, transparent 65%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .video-prompt {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+
+    .video-prompt.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .video-prompt-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.6em;
+      text-transform: uppercase;
+      color: var(--olive-light);
+      margin-bottom: 2.5rem;
+    }
+
+    .video-play-btn {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 2px solid var(--olive-light);
+      background: rgba(143,168,130,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2.5rem;
+      transition: background 0.4s ease, transform 0.4s ease, border-color 0.4s ease;
+      cursor: pointer;
+    }
+
+    .video-play-btn:hover,
+    .video-play-btn:active {
+      background: rgba(143,168,130,0.25);
+      transform: scale(1.08);
+      border-color: var(--olive);
+    }
+
+    /* Play triangle */
+    .video-play-btn::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 16px 0 16px 28px;
+      border-color: transparent transparent transparent var(--olive-light);
+      margin-left: 5px;
+      transition: border-color 0.4s ease;
+    }
+
+    .video-play-btn:hover::after {
+      border-color: transparent transparent transparent var(--white);
+    }
+
+    .video-prompt-hint {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.3rem, 3vw, 2rem);
+      font-weight: 300;
+      font-style: italic;
+      color: rgba(253,253,248,0.5);
+    }
+
+    /* The actual video element, hidden until playing inline (fullscreen handled by API) */
+    .video-player {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: #000;
+    }
+
+    .video-player.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-player video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    /* Close/skip button on the video overlay */
+    .video-close-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      z-index: 10001;
+      background: rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: rgba(255,255,255,0.7);
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .video-close-btn:hover {
+      background: rgba(0,0,0,0.8);
+      color: #fff;
+    }
+
     /* ─── FINALE ──────────────────────────────────────────────── */
     .finale-section {
       min-height: 100vh;
@@ -853,6 +995,28 @@
     </div>
   </section>
 
+  <!-- ── VIDEO SECTION ────────────────────────────────────────── -->
+  <section class="video-section" id="video-section">
+    <div class="video-section-glow"></div>
+    <div class="video-prompt" id="video-prompt">
+      <p class="video-prompt-label">Before we tell you when</p>
+      <div class="video-play-btn" id="video-play-btn"></div>
+      <p class="video-prompt-hint">Tap to watch our story</p>
+    </div>
+  </section>
+
+  <!-- Video overlay (plays over everything, works as fullscreen fallback) -->
+  <div class="video-player" id="video-player">
+    <video id="save-date-video"
+           src="images/SaveTheDateVideo.mp4"
+           playsinline
+           webkit-playsinline
+           preload="auto"
+           poster="">
+    </video>
+    <button class="video-close-btn" id="video-close-btn" aria-label="Close video">✕</button>
+  </div>
+
   <!-- ── SAVE THE DATE FINALE ──────────────────────────────────── -->
   <section class="finale-section" id="finale">
     <div class="finale-glow"></div>
@@ -901,18 +1065,129 @@
       '.photo-frame, .story-text, .proposal-item, .proposal-caption, .section-eyebrow'
     ).forEach(el => observer.observe(el));
 
-    // ── FINALE OBSERVER ─────────────────────────────────────────
+    // ── VIDEO PROMPT OBSERVER ──────────────────────────────────
+    const videoPrompt = document.getElementById('video-prompt');
+    const videoObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) videoPrompt.classList.add('in-view');
+      });
+    }, { threshold: 0.3 });
+    videoObserver.observe(document.getElementById('video-section'));
+
+    // ── VIDEO PLAYBACK ────────────────────────────────────────
+    const videoPlayer   = document.getElementById('video-player');
+    const videoEl       = document.getElementById('save-date-video');
+    const playBtn       = document.getElementById('video-play-btn');
+    const videoSection  = document.getElementById('video-section');
+    const closeBtn      = document.getElementById('video-close-btn');
+
+    function tryFullscreen(el) {
+      // iOS Safari: only webkitEnterFullscreen on <video> works
+      if (videoEl.webkitEnterFullscreen) {
+        try { videoEl.webkitEnterFullscreen(); return; } catch(e) {}
+      }
+      // Standard Fullscreen API (Chrome, Firefox, Edge, Android)
+      const target = el || videoPlayer;
+      if (target.requestFullscreen) {
+        target.requestFullscreen().catch(() => {});
+      } else if (target.webkitRequestFullscreen) {
+        target.webkitRequestFullscreen();
+      } else if (target.msRequestFullscreen) {
+        target.msRequestFullscreen();
+      }
+    }
+
+    function exitFullscreen() {
+      if (document.fullscreenElement) {
+        document.exitFullscreen().catch(() => {});
+      } else if (document.webkitFullscreenElement) {
+        document.webkitExitFullscreen();
+      }
+    }
+
+    function openVideo() {
+      videoPlayer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      videoEl.currentTime = 0;
+      videoEl.play().then(() => {
+        tryFullscreen(videoPlayer);
+      }).catch(() => {
+        // If autoplay blocked, show the overlay so user can tap video directly
+        videoEl.controls = true;
+      });
+    }
+
+    function closeVideo() {
+      videoEl.pause();
+      exitFullscreen();
+      videoPlayer.classList.remove('active');
+      document.body.style.overflow = '';
+      videoEl.controls = false;
+      // Scroll to finale and trigger its animations
+      triggerFinale();
+    }
+
+    // Play on tap (the whole section is tappable, or just the button)
+    playBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      openVideo();
+    });
+    videoSection.addEventListener('click', openVideo);
+
+    // Close button (skip)
+    closeBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      closeVideo();
+    });
+
+    // When video ends naturally, close and show finale
+    videoEl.addEventListener('ended', closeVideo);
+
+    // Handle exiting fullscreen via system controls (swipe down on iOS, back on Android)
+    document.addEventListener('fullscreenchange', function() {
+      if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (videoPlayer.classList.contains('active') && videoEl.ended) {
+          closeVideo();
+        }
+      }
+    });
+    document.addEventListener('webkitfullscreenchange', function() {
+      if (!document.webkitFullscreenElement) {
+        if (videoPlayer.classList.contains('active') && videoEl.ended) {
+          closeVideo();
+        }
+      }
+    });
+    // iOS fires this when exiting native fullscreen
+    videoEl.addEventListener('webkitendfullscreen', function() {
+      if (videoEl.ended) {
+        closeVideo();
+      }
+    });
+
+    // ── FINALE ────────────────────────────────────────────────
     const finaleEl = document.getElementById('finale');
     let finaleTriggered = false;
 
+    function triggerFinale() {
+      if (finaleTriggered) return;
+      finaleTriggered = true;
+      // Smooth scroll to finale
+      finaleEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Stagger the reveal slightly after scroll begins
+      setTimeout(() => {
+        ['f-eyebrow','f-main','f-date','f-rule','f-names','f-footer'].forEach(id => {
+          document.getElementById(id).classList.add('in-view');
+        });
+        initParticles();
+      }, 600);
+    }
+
+    // Also trigger finale if someone scrolls past the video without playing it
     const finaleObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if (e.isIntersecting && !finaleTriggered) {
-          finaleTriggered = true;
-          ['f-eyebrow','f-main','f-date','f-rule','f-names','f-footer'].forEach(id => {
-            document.getElementById(id).classList.add('in-view');
-          });
-          initParticles();
+          triggerFinale();
         }
       });
     }, { threshold: 0.25 });
